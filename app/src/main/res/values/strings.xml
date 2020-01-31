@@ -13,6 +13,9 @@
     <string name="Longitude">Longitude :</string>
     <string name="Description">Description :</string>
     <string name="Temperature">Temperature :</string>
+    <string name="min">Min :</string>
+    <string name="max">Max :</string>
+    <string name="wind">Wind :</string>
     <string name="Visibility">Visibility :</string>
     <string name="Humidity">Humidity :</string>
     <string name="Pressure">Pressure :</string>

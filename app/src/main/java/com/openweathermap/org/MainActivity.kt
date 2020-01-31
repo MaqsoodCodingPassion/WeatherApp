@@ -3,26 +3,22 @@ package com.openweathermap.org
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
-import androidx.annotation.VisibleForTesting
+import android.util.AttributeSet
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.bumptech.glide.Glide
-import com.openweathermap.org.R
 import com.openweathermap.org.gps.GpsUtils
 import com.openweathermap.org.gps.LocationViewModel
-import com.openweathermap.org.model.CurrentWeatherResponse
-import com.openweathermap.org.model.WeatherEntity
 import com.openweathermap.org.util.ViewModelFactory
 import dagger.android.AndroidInjection
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,7 +43,8 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity.isGPSEnabled = isGPSEnable
             }
         })
-        getWeatherDataFromNetwork()
+        searchBtn.setOnClickListener{callCurrentWeatherAPI()}
+        //getWeatherDataFromNetwork()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -55,50 +52,44 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GPS_REQUEST) {
                 isGPSEnabled = true
-                getWeatherDataFromNetwork()
+               // getWeatherDataFromNetwork()
             }
         }
     }
 
-    private fun callCurrentWeatherAPI(lat: String?,long: String?) {
-       weatherViewModel.fetchCurrentWeatherDetails(lat!!,long!!,API_KEY).observe(this, Observer {
+    private fun callCurrentWeatherAPI() {
+        weatherViewModel.fetchCurrentWeatherDetails(getCitiesList(),API_KEY).observe(this, Observer {
            hideShimmer()
        })
     }
 
-    @VisibleForTesting
-    private fun updateUI(weatherEntity: WeatherEntity) {
-        mainContainer.showView(true)
-        locationVal.text = weatherEntity.country
-        latVal.text = weatherEntity.lat
-        lonVal.text = weatherEntity.lon
-        descriptionVal.text = weatherEntity.description
-        tempVal.text = weatherEntity.temp
-        visibilityVal.text = weatherEntity.visibility
-        humidityVal.text = weatherEntity.humidity
-        pressureVal.text = weatherEntity.pressure.toString()
-        speedVal.text = weatherEntity.speed
-        cloudVal.text = weatherEntity.main
-        placeNameVal.text = weatherEntity.name
-        var iconurl = "http://openweathermap.org/img/w/" + weatherEntity.icon + ".png";
-        Glide.with(this)
-            .load(iconurl)
-            .into(iconVal)
+    private fun getCitiesList(): ArrayList<String> {
+        val values = citiesField.text.toString().split(",")
+        var citiesList = ArrayList(values)
+        return citiesList
     }
 
+    /* @VisibleForTesting
+     private fun updateUI(weatherEntity: WeatherEntity) {
+
+     }*/
+
     private fun hideShimmer() {
-        latLong.showView(false)
+
     }
 
     private fun getWeatherDataFromNetwork() {
         when {
             !isGPSEnabled -> {
-                latLong.showView(true)
-                mainContainer.showView(false)
-                latLong.text = getString(R.string.enable_gps)}
+                //show error
+               // latLong.showView(true)
+                //mainContainer.showView(false)
+                //latLong.text = getString(R.string.enable_gps)
+                }
 
             isPermissionsGranted(this) -> startLocationUpdate()
-            shouldShowRequestPermissionRationale(this) -> latLong.text = getString(R.string.permission_request)
+            shouldShowRequestPermissionRationale(this) -> "khan"
+               // latLong.text = getString(R.string.permission_request)
 
             else -> ActivityCompat.requestPermissions(
                     this,
@@ -115,7 +106,7 @@ class MainActivity : AppCompatActivity() {
             LAT = it.latitude.toString()
             LONG = it.longitude.toString()
             if(count==0){
-                callCurrentWeatherAPI(LAT,LONG)
+                callCurrentWeatherAPI()
                 count++
             }
         })
@@ -126,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             LOCATION_REQUEST -> {
-                getWeatherDataFromNetwork()
+                //getWeatherDataFromNetwork()
             }
         }
     }

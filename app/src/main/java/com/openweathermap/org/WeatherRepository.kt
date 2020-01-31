@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(private val service: Service) {
 
-    fun fetchCurrentWeatherDetails(lat: String, long: String, apiKey: String): Single<CurrentWeatherResponse> {
-        return service.getWeatherDetails(lat, long, apiKey)
+    fun fetchCurrentWeatherDetails(cityName: String, apiKey: String): Single<CurrentWeatherResponse> {
+        return service.getWeatherDetails(cityName, apiKey)
     }
 }

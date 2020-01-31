@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="font_style">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">@dimen/font_size_15sp</item>
+        <item name="android:textColor">@color/font_color</item>
+    </style>
+
 </resources>

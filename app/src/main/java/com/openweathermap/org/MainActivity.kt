@@ -3,11 +3,9 @@ package com.openweathermap.org
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
@@ -17,9 +15,9 @@ import com.openweathermap.org.gps.GpsUtils
 import com.openweathermap.org.gps.LocationViewModel
 import com.openweathermap.org.util.ViewModelFactory
 import dagger.android.AndroidInjection
-import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,12 +42,14 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity.isGPSEnabled = isGPSEnable
             }
         })
-        intiAdapter()
+        intiView()
         searchBtn.setOnClickListener{callCurrentWeatherAPI()}
         getCurrentCityNameFromAPI()
     }
 
-    private fun intiAdapter() {
+    private fun intiView() {
+        citiesField.onActionViewExpanded()
+        citiesField.isIconified = true
         fiveDaysDataRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
@@ -64,9 +64,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun callCurrentWeatherAPI() {
-        weatherViewModel.fetchCurrentWeatherDetails(getCitiesList(),API_KEY).observe(this, Observer {
-           hideShimmer()
-       })
+        if(getCitiesList().size in 3..7){
+            weatherViewModel.fetchCurrentWeatherDetails(getCitiesList(),API_KEY).observe(this, Observer {
+                hideShimmer()
+            })
+        }else if(getCitiesList().size < 3){
+            Toast.makeText(this,"Please enter the minimum 3 cities separated with comma",Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(this,"Please do not enter more than 7 cities",Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun getCurrentLocationDetailsAPI(lat: String?,long: String?) {
@@ -88,10 +94,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun getCitiesList(): ArrayList<String> {
-        val values = citiesField.text.toString().split(",")
-        var citiesList = ArrayList(values)
-        return citiesList
+    private fun getCitiesList(): ArrayList<String?> {
+        val values = citiesField.query.toString().split(",")
+        return ArrayList<String?>(values)
     }
 
     /* @VisibleForTesting

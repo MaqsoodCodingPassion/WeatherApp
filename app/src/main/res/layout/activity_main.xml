@@ -16,12 +16,14 @@
         android:layout_height="wrap_content"
         android:text="Step1#" />
 
-    <EditText
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/citiesField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
         android:fontFamily="@font/roboto_bold"
         android:textSize="16sp"
+        app:defaultQueryHint="@string/searchHint"
         android:layout_below="@+id/step1" />
 
     <Button
@@ -44,6 +46,8 @@
         android:id="@+id/step2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="16sp"
         android:layout_below="@+id/citiesRecyclerView"
         android:text="Step2#" />
 

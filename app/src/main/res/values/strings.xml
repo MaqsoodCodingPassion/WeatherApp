@@ -24,4 +24,5 @@
     <string name="Weather">Weather :</string>
     <string name="placeName">PlaceName :</string>
     <string name="icon">Weather view :</string>
+    <string name="searchHint">Enter the cities name with comma</string>
 </resources>

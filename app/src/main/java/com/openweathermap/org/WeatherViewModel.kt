@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.openweathermap.org.model.CurrentWeatherResponse
+import com.openweathermap.org.model.FiveDaysForecastResponse
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -45,6 +46,26 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
         val observable = repository.getCurrentWeatherDetails(lat, long, apiKey)
 
         observable.map<CurrentWeatherResponse> {
+            it
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    weatherResponse.value = it
+                },
+                {
+                    weatherResponse.value = null
+                })
+
+        return weatherResponse
+    }
+
+    fun fetchForeCast5Days3HoursData(cityName: String,apiKey: String): LiveData<FiveDaysForecastResponse> {
+
+        val weatherResponse: MutableLiveData<FiveDaysForecastResponse> = MutableLiveData()
+        val observable = repository.fetchForecast5Days3Hours(cityName, apiKey)
+
+        observable.map<FiveDaysForecastResponse> {
             it
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

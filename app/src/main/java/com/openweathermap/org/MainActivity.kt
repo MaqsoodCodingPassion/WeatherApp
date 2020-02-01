@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.openweathermap.org.gps.GpsUtils
 import com.openweathermap.org.gps.LocationViewModel
 import com.openweathermap.org.util.ViewModelFactory
@@ -43,8 +44,13 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity.isGPSEnabled = isGPSEnable
             }
         })
+        intiAdapter()
         searchBtn.setOnClickListener{callCurrentWeatherAPI()}
         getCurrentCityNameFromAPI()
+    }
+
+    private fun intiAdapter() {
+        fiveDaysDataRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -66,8 +72,17 @@ class MainActivity : AppCompatActivity() {
     private fun getCurrentLocationDetailsAPI(lat: String?,long: String?) {
         weatherViewModel.fetchCurrentLocationDetails(lat!!,long!!,API_KEY).observe(this, Observer {
             if(it!=null){
-                System.out.println("*********** Place Name : "+it.name)
                 cityName.text = it.name.toString()
+                getForcast5Days3HoursAPI(it.name)
+            }
+            hideShimmer()
+        })
+    }
+
+    private fun getForcast5Days3HoursAPI(cityName: String?) {
+        weatherViewModel.fetchForeCast5Days3HoursData(cityName!!,API_KEY).observe(this, Observer {
+            if(it!=null){
+                fiveDaysDataRecyclerView.adapter = Forecast5Days3HoursAdapter(it.list)
             }
             hideShimmer()
         })

@@ -11,13 +11,17 @@
     <TextView
         android:id="@+id/step1"
         android:layout_width="match_parent"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="16sp"
         android:layout_height="wrap_content"
-        android:text="Step1" />
+        android:text="Step1#" />
 
     <EditText
         android:id="@+id/citiesField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="16sp"
         android:layout_below="@+id/step1" />
 
     <Button
@@ -41,20 +45,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/citiesRecyclerView"
-        android:text="Step2" />
+        android:text="Step2#" />
 
     <TextView
         android:id="@+id/cityLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/text_style"
         android:layout_below="@+id/step2"
         android:layout_marginTop="10dp"
-        android:text="Current city :" />
+        android:text="Current city : " />
 
     <TextView
         android:id="@+id/cityName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/text_style"
         android:layout_below="@+id/step2"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/cityLabel"/>

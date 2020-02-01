@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
         searchBtn.setOnClickListener{callCurrentWeatherAPI()}
-        //getWeatherDataFromNetwork()
+        getCurrentCityNameFromAPI()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -63,6 +63,16 @@ class MainActivity : AppCompatActivity() {
        })
     }
 
+    private fun getCurrentLocationDetailsAPI(lat: String?,long: String?) {
+        weatherViewModel.fetchCurrentLocationDetails(lat!!,long!!,API_KEY).observe(this, Observer {
+            if(it!=null){
+                System.out.println("*********** Place Name : "+it.name)
+                cityName.text = it.name.toString()
+            }
+            hideShimmer()
+        })
+    }
+
     private fun getCitiesList(): ArrayList<String> {
         val values = citiesField.text.toString().split(",")
         var citiesList = ArrayList(values)
@@ -78,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun getWeatherDataFromNetwork() {
+    private fun getCurrentCityNameFromAPI() {
         when {
             !isGPSEnabled -> {
                 //show error
@@ -106,7 +116,7 @@ class MainActivity : AppCompatActivity() {
             LAT = it.latitude.toString()
             LONG = it.longitude.toString()
             if(count==0){
-                callCurrentWeatherAPI()
+                getCurrentLocationDetailsAPI(LAT,LONG)
                 count++
             }
         })

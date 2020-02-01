@@ -7,6 +7,7 @@ import com.openweathermap.org.model.CurrentWeatherResponse
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.internal.operators.observable.ObservableReplay.observeOn
 import io.reactivex.schedulers.Schedulers
@@ -18,7 +19,6 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
 
         val weatherResponse: MutableLiveData<List<CurrentWeatherResponse>>  = MutableLiveData()
        // Observable.concat()
-
         for(city in citiesList){
             val observable = repository.fetchCurrentWeatherDetails(city, apiKey)
 
@@ -34,6 +34,27 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
                         weatherResponse.value = null
                     })
         }
+
+        return weatherResponse
+    }
+
+    fun fetchCurrentLocationDetails(
+        lat: String, long: String, apiKey: String): MutableLiveData<CurrentWeatherResponse> {
+
+        val weatherResponse: MutableLiveData<CurrentWeatherResponse> = MutableLiveData()
+        val observable = repository.getCurrentWeatherDetails(lat, long, apiKey)
+
+        observable.map<CurrentWeatherResponse> {
+            it
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    weatherResponse.value = it
+                },
+                {
+                    weatherResponse.value = null
+                })
 
         return weatherResponse
     }

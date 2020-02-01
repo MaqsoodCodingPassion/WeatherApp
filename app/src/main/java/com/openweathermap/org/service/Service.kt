@@ -10,4 +10,8 @@ interface Service {
     @GET("weather")
     fun getWeatherDetails(@Query("q") lat: String, @Query("appid") appid: String)
             : Single<CurrentWeatherResponse>
+
+    @GET("weather")
+    fun getCurrentWeatherDetails(@Query("lat") lat: String, @Query("lon") lon: String, @Query("appid") appid: String)
+            : Single<CurrentWeatherResponse>
 }

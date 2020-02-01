@@ -11,4 +11,8 @@ class WeatherRepository @Inject constructor(private val service: Service) {
     fun fetchCurrentWeatherDetails(cityName: String, apiKey: String): Single<CurrentWeatherResponse> {
         return service.getWeatherDetails(cityName, apiKey)
     }
+
+    fun getCurrentWeatherDetails(lat: String, long: String, apiKey: String): Single<CurrentWeatherResponse> {
+        return service.getCurrentWeatherDetails(lat, long, apiKey)
+    }
 }

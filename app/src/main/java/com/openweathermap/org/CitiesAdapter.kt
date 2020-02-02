@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.openweathermap.org.model.CurrentWeatherResponse
 import kotlinx.android.synthetic.main.forecast_row_item.view.*
 
-class CitiesAdapter(val weatherList:List<CurrentWeatherResponse>) :RecyclerView.Adapter<CitiesViewHolder>() {
+class CitiesAdapter(var weatherList:List<CurrentWeatherResponse>) :RecyclerView.Adapter<CitiesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitiesViewHolder {
         return CitiesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.forecast_row_item, parent, false))
@@ -25,6 +25,10 @@ class CitiesAdapter(val weatherList:List<CurrentWeatherResponse>) :RecyclerView.
         holder.wind.text = weatherList.get(position).wind.speed.toString()
         holder.dateLabel.visibility = View.GONE
         holder.date.visibility = View.GONE
+    }
+
+    fun setDataList(weatherList: List<CurrentWeatherResponse>?) {
+        this.weatherList = weatherList!!
     }
 }
 

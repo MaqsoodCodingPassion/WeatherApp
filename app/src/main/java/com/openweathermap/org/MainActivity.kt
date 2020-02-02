@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity() {
             citiesWeatherList?.clear()
             weatherViewModel.fetchMultipleCitiesWeatherData(getCitiesList(),API_KEY).observe(this, Observer {
                 searchBtn.isEnabled = true
+                hideKeyboard(this)
                 if(it!=null){
                     citiesAdapter!!.setDataList(it)
                     citiesAdapter!!.notifyDataSetChanged()
@@ -114,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         weatherViewModel.fetchForeCast5Days3HoursData(cityName!!,API_KEY).observe(this, Observer {
             if(it!=null){
                 progressBar.visibility = View.GONE
-                foreCast5DaysAdapter?.setDataList(it.list)
+                it.list?.let { it1 -> foreCast5DaysAdapter?.setDataList(it1) }
                 foreCast5DaysAdapter!!.notifyDataSetChanged()
             }
         })

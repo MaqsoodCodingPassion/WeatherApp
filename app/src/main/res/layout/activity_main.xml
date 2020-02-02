@@ -8,7 +8,6 @@
     android:layout_margin="16dp"
     tools:context=".MainActivity">
 
-
     <TextView
         android:id="@+id/step1"
         android:layout_width="match_parent"
@@ -71,9 +70,9 @@
         android:id="@+id/progressBar"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="40dp"
         android:layout_below="@+id/cityName"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fiveDaysDataRecyclerView"

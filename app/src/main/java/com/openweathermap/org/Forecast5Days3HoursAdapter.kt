@@ -18,11 +18,11 @@ class Forecast5Days3HoursAdapter(var weatherList:List<ListItem>) :RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: ForeCastViewHolder, position: Int) {
-        holder?.temp?.text = weatherList.get(position).main.temp.toString()
-        holder.tempMin.text = weatherList.get(position).main.tempMin.toString()
-        holder.tempMax.text = weatherList.get(position).main.tempMax.toString()
-        holder.weather.text = weatherList.get(position).weather.get(0).description
-        holder.wind.text = weatherList.get(position).wind.speed.toString()
+        holder?.temp?.text = weatherList.get(position).main?.temp.toString()
+        holder.tempMin.text = weatherList.get(position).main?.tempMin.toString()
+        holder.tempMax.text = weatherList.get(position).main?.tempMax.toString()
+        holder.weather.text = weatherList.get(position).weather?.get(0)?.description
+        holder.wind.text = weatherList.get(position).wind?.speed.toString()
         holder.date.text = weatherList.get(position).dtTxt
     }
 

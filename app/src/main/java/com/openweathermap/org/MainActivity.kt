@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     private fun intiView() {
         citiesField.onActionViewExpanded()
         citiesField.isIconified = true
+        citiesRecyclerView.layoutManager = LinearLayoutManager(this)
         fiveDaysDataRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
@@ -58,7 +59,6 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GPS_REQUEST) {
                 isGPSEnabled = true
-               // getWeatherDataFromNetwork()
             }
         }
     }
@@ -66,7 +66,9 @@ class MainActivity : AppCompatActivity() {
     private fun callCurrentWeatherAPI() {
         if(getCitiesList().size in 3..7){
             weatherViewModel.fetchCurrentWeatherDetails(getCitiesList(),API_KEY).observe(this, Observer {
-                hideShimmer()
+                if(it!=null){
+                    citiesRecyclerView.adapter = CitiesAdapter(it)
+                }
             })
         }else if(getCitiesList().size < 3){
             Toast.makeText(this,"Please enter the minimum 3 cities separated with comma",Toast.LENGTH_SHORT).show()
@@ -112,19 +114,19 @@ class MainActivity : AppCompatActivity() {
         when {
             !isGPSEnabled -> {
                 //show error
-               // latLong.showView(true)
+                // latLong.showView(true)
                 //mainContainer.showView(false)
                 //latLong.text = getString(R.string.enable_gps)
-                }
+            }
 
             isPermissionsGranted(this) -> startLocationUpdate()
             shouldShowRequestPermissionRationale(this) -> "khan"
-               // latLong.text = getString(R.string.permission_request)
+            // latLong.text = getString(R.string.permission_request)
 
             else -> ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-                    LOCATION_REQUEST
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                LOCATION_REQUEST
             )
         }
     }

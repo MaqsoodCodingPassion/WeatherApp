@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import com.openweathermap.org.model.CurrentWeatherResponse
 import com.openweathermap.org.model.FiveDaysForecastResponse
 import com.openweathermap.org.service.Service
+import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(private val service: Service) {
 
-    fun fetchCurrentWeatherDetails(cityName: String, apiKey: String): Single<CurrentWeatherResponse> {
+    fun fetchCurrentWeatherDetails(cityName: String, apiKey: String): Observable<CurrentWeatherResponse> {
         return service.getWeatherDetails(cityName, apiKey)
     }
 

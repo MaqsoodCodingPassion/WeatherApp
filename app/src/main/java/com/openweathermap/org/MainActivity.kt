@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,12 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.openweathermap.org.gps.GpsUtils
 import com.openweathermap.org.gps.LocationViewModel
 import com.openweathermap.org.model.CurrentWeatherResponse
-import com.openweathermap.org.model.FiveDaysForecastResponse
 import com.openweathermap.org.model.ListItem
 import com.openweathermap.org.util.ViewModelFactory
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -51,16 +48,14 @@ class MainActivity : AppCompatActivity() {
                 this@MainActivity.isGPSEnabled = isGPSEnable
             }
         })
-        intiView()
+        initAdapter()
         searchBtn.setOnClickListener{callCurrentWeatherAPI()}
         getCurrentCityNameFromAPI()
     }
 
-    private fun intiView() {
-
+    private fun initAdapter() {
         citiesWeatherList = ArrayList<CurrentWeatherResponse>()
         citiesAdapter = CitiesAdapter(citiesWeatherList!!)
-
         foreCast5DaysDataList = ArrayList<ListItem>()
         foreCast5DaysAdapter = Forecast5Days3HoursAdapter(foreCast5DaysDataList!!)
 

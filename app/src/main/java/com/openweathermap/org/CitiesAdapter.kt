@@ -5,13 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.openweathermap.org.model.CurrentWeatherResponse
-import com.openweathermap.org.model.ListItem
-import kotlinx.android.synthetic.main.forecast_row.view.*
+import kotlinx.android.synthetic.main.forecast_row_item.view.*
 
 class CitiesAdapter(val weatherList:List<CurrentWeatherResponse>) :RecyclerView.Adapter<CitiesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitiesViewHolder {
-        return CitiesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.forecast_row, parent, false))
+        return CitiesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.forecast_row_item, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -24,6 +23,7 @@ class CitiesAdapter(val weatherList:List<CurrentWeatherResponse>) :RecyclerView.
         holder.tempMax.text = weatherList.get(position).main.tempMax.toString()
         holder.weather.text = weatherList.get(position).weather.get(0).description
         holder.wind.text = weatherList.get(position).wind.speed.toString()
+        holder.dateLabel.visibility = View.GONE
         holder.date.visibility = View.GONE
     }
 }
@@ -34,5 +34,6 @@ class CitiesViewHolder (view: View) : RecyclerView.ViewHolder(view) {
     val tempMax = view.maxVal
     val weather = view.weatherVal
     val wind = view.windVal
+    val dateLabel = view.date
     val date = view.dateVal
 }

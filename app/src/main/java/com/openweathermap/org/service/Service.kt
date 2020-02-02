@@ -10,14 +10,14 @@ import retrofit2.http.Query
 interface Service {
 
     @GET("weather")
-    fun getWeatherDetails(@Query("q") lat: String, @Query("appid") appid: String)
+    fun getCityWeatherDataService(@Query("q") lat: String, @Query("appid") appid: String)
             : Observable<CurrentWeatherResponse>
 
     @GET("weather")
-    fun getCurrentWeatherDetails(@Query("lat") lat: String, @Query("lon") lon: String, @Query("appid") appid: String)
+    fun getCurrentWeatherDetailsService(@Query("lat") lat: String, @Query("lon") lon: String, @Query("appid") appid: String)
             : Single<CurrentWeatherResponse>
 
     @GET("forecast")
-    fun getForecast5Days3Hours(@Query("q") lat: String,@Query("appid") appid: String)
+    fun getForecast5Days3HoursService(@Query("q") lat: String, @Query("appid") appid: String)
             : Single<FiveDaysForecastResponse>
 }

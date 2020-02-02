@@ -1,77 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/step1"
-        android:layout_width="match_parent"
-        android:fontFamily="@font/roboto_bold"
-        android:textSize="16sp"
-        android:layout_height="wrap_content"
-        android:text="Step1#" />
-
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/citiesField"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:fontFamily="@font/roboto_bold"
-        android:textSize="16sp"
-        app:defaultQueryHint="@string/searchHint"
-        android:layout_below="@+id/step1" />
+        android:layout_margin="16dp">
 
-    <Button
-        android:id="@+id/searchBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/citiesField"
-        android:layout_marginTop="12dp"
-        android:text="Search" />
+        <TextView
+            android:id="@+id/step1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="Step1#"
+            android:textSize="16sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/citiesRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchBtn"
-        android:layout_marginTop="12dp"
-        android:background="#fafafa" />
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/citiesField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/step1"
+            android:fontFamily="@font/roboto_bold"
+            android:iconifiedByDefault="false"
+            android:textSize="16sp"
+            app:defaultQueryHint="@string/searchHint" />
 
-    <TextView
-        android:id="@+id/step2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
-        android:textSize="16sp"
-        android:layout_below="@+id/citiesRecyclerView"
-        android:text="Step2#" />
+        <Button
+            android:id="@+id/searchBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/citiesField"
+            android:layout_marginTop="12dp"
+            android:text="Search" />
 
-    <TextView
-        android:id="@+id/cityLabel"
-        style="@style/text_style"
-        android:layout_below="@+id/step2"
-        android:layout_marginTop="10dp"
-        android:text="Current city : " />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/citiesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchBtn"
+            android:layout_marginTop="12dp"
+            android:background="#fafafa" />
 
-    <TextView
-        android:id="@+id/cityName"
-        style="@style/text_style"
-        android:layout_below="@+id/step2"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/cityLabel"/>
+        <TextView
+            android:id="@+id/step2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/citiesRecyclerView"
+            android:fontFamily="@font/roboto_bold"
+            android:layout_marginTop="10dp"
+            android:text="Step2#"
+            android:textSize="16sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fiveDaysDataRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cityLabel"
-        android:layout_marginTop="12dp"
-        android:background="#fafafa" />
+        <TextView
+            android:id="@+id/cityLabel"
+            style="@style/text_style"
+            android:layout_below="@+id/step2"
+            android:layout_marginTop="10dp"
+            android:text="Current city : " />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/cityName"
+            style="@style/text_style"
+            android:layout_below="@+id/step2"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/cityLabel" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fiveDaysDataRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cityLabel"
+            android:layout_marginTop="12dp"
+            android:background="#fafafa" />
+
+    </RelativeLayout>
+
+</ScrollView>
 

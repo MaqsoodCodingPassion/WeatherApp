@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun callCurrentWeatherAPI() {
         if(getCitiesList().size in 3..7){
-            weatherViewModel.fetchCurrentWeatherDetails(getCitiesList(),API_KEY).observe(this, Observer {
+            weatherViewModel.fetchMultipleCitiesWeatherData(getCitiesList(),API_KEY).observe(this, Observer {
                 if(it!=null){
                     citiesRecyclerView.adapter = CitiesAdapter(it)
                 }

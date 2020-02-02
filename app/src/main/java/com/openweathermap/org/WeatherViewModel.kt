@@ -12,7 +12,7 @@ import java.util.*
 
 class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
 
-    fun fetchCurrentWeatherDetails(
+    fun fetchMultipleCitiesWeatherData(
         citiesList: ArrayList<String?>,
         apiKey: String
     ): LiveData<List<CurrentWeatherResponse>> {
@@ -20,7 +20,7 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
         val weatherResponse: MutableLiveData<List<CurrentWeatherResponse>> = MutableLiveData()
 
         Observable.fromIterable(citiesList).flatMap {
-            repository.fetchCurrentWeatherDetails(it, apiKey)
+            repository.fetchCityWeatherData(it, apiKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
         }.toList()
@@ -40,7 +40,7 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
     ): MutableLiveData<CurrentWeatherResponse> {
 
         val weatherResponse: MutableLiveData<CurrentWeatherResponse> = MutableLiveData()
-        val observable = repository.getCurrentWeatherDetails(lat, long, apiKey)
+        val observable = repository.fetchCurrentWeatherDetails(lat, long, apiKey)
 
         observable.map<CurrentWeatherResponse> {
             it

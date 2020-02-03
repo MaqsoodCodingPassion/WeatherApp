@@ -1,10 +1,11 @@
 package com.openweathermap.org
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.openweathermap.org.model.CurrentWeatherResponse
-import com.openweathermap.org.model.FiveDaysForecastResponse
+import com.openweathermap.org.model.Forecast5days3hoursResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -60,12 +61,12 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
     fun fetchForeCast5Days3HoursData(
         cityName: String,
         apiKey: String
-    ): LiveData<FiveDaysForecastResponse> {
+    ): LiveData<Forecast5days3hoursResponse> {
 
-        val weatherResponse: MutableLiveData<FiveDaysForecastResponse> = MutableLiveData()
+        val weatherResponse: MutableLiveData<Forecast5days3hoursResponse> = MutableLiveData()
         val observable = repository.fetchForecast5Days3Hours(cityName, apiKey)
 
-        observable.map<FiveDaysForecastResponse> {
+        observable.map<Forecast5days3hoursResponse> {
             it
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

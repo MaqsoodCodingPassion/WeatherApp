@@ -2,7 +2,7 @@ package com.openweathermap.org.model
 
 import com.google.gson.annotations.SerializedName
 
-class FiveDaysForecastResponse {
+class Forecast5days3hoursResponse {
     @SerializedName("city")
     var city: City? = null
     @SerializedName("cnt")

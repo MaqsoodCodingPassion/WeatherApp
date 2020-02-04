@@ -17,7 +17,7 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
 
     var compositeDisposable = CompositeDisposable()
     var currentWeatherResponse: MutableLiveData<CurrentWeatherResponse> =
-        MutableLiveData()  //Forecast5days3hoursResponse
+        MutableLiveData() 
     var forecast5days3hoursResponse: MutableLiveData<Forecast5days3hoursResponse> =
         MutableLiveData()
 

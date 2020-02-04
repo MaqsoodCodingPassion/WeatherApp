@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
         initAdapter()
-        searchBtn.setOnClickListener{callCurrentWeatherAPI()}
+        searchBtn.setOnClickListener{callMultipleCitiesWeather()}
 
         searchViewSetUp()
         citiesField.requestFocusFromTouch()
@@ -88,24 +88,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun callCurrentWeatherAPI() {
-        if(getCitiesList().size in 3..7){
-            searchBtn.isEnabled = false
-            citiesWeatherList?.clear()
-            weatherViewModel.fetchMultipleCitiesWeatherData(getCitiesList(),API_KEY).observe(this, Observer {
-                searchBtn.isEnabled = true
-                hideKeyboard(this)
-                if(it!=null){
-                    citiesAdapter!!.setDataList(it)
-                    citiesAdapter!!.notifyDataSetChanged()
-                }else{
-                    showErrorDialog(this,"Please enter the proper city name with separated comma")
-                }
-            })
-        }else if(getCitiesList().size < 3){
-            showErrorDialog(this,"Please enter the minimum 3 cities separated with comma")
-        }else{
-            showErrorDialog(this,"Please do not enter more than 7 cities")
+    private fun callMultipleCitiesWeather() {
+        when {
+            getCitiesList().size in 3..7 -> {
+                searchBtn.isEnabled = false
+                citiesWeatherList?.clear()
+                weatherViewModel.fetchMultipleCitiesWeatherData(getCitiesList(),API_KEY).observe(this, Observer {
+                    searchBtn.isEnabled = true
+                    hideKeyboard(this)
+                    if(it!=null){
+                        citiesAdapter!!.setDataList(it)
+                        citiesAdapter!!.notifyDataSetChanged()
+                    }else{
+                        showErrorDialog(this,"Please enter the proper city name with separated comma")
+                    }
+                })
+            }
+            getCitiesList().size < 3 -> {
+                showErrorDialog(this,"Please enter the minimum 3 cities separated with comma")
+            }
+            else -> {
+                showErrorDialog(this,"Please do not enter more than 7 cities")
+            }
         }
     }
 

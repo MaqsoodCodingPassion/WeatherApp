@@ -14,7 +14,7 @@ import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import java.io.File
 
-class WeatherAPIsTest {
+class WeatherViewModelTest {
 
     private lateinit var currentWeatherResponse: CurrentWeatherResponse
 

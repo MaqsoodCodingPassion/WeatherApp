@@ -12,11 +12,7 @@ import kotlinx.android.synthetic.main.forecast_row_item.view.*
 class CitiesAdapter(var weatherList:List<CurrentWeatherResponse>) :RecyclerView.Adapter<CitiesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitiesViewHolder {
-        return CitiesViewHolder(
-            LayoutInflater.from(
-                parent.context
-            ).inflate(
-                R.layout.forecast_row_item,
+        return CitiesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.forecast_row_item,
                 parent,
                 false
             )

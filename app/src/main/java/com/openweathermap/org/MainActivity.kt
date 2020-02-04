@@ -49,7 +49,17 @@ class MainActivity : AppCompatActivity() {
         })
         initAdapter()
         searchBtn.setOnClickListener{callCurrentWeatherAPI()}
+
+        searchViewSetUp()
+        citiesField.requestFocusFromTouch()
         callCurrentCityNameAPI()
+    }
+
+    private fun searchViewSetUp() {
+        citiesField.setIconifiedByDefault(true)
+        citiesField.isFocusable = true
+        citiesField.isIconified = false
+        citiesField.clearFocus()
     }
 
     private fun initAdapter() {

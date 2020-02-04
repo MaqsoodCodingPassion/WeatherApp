@@ -39,6 +39,9 @@ class WeatherAPIsTest {
         Mockito.`when`(service.getForecast5Days3HoursService("Bengaluru", "2332e23333"))
             .thenReturn(Observable.just(this.forecast5days3hoursResponse))
 
+        Mockito.`when`(service.getCityWeatherDataService("Bengaluru", "2332e23333"))
+            .thenReturn(Observable.just(this.currentWeatherResponse))
+
 
     }
 
@@ -85,6 +88,28 @@ class WeatherAPIsTest {
                 it.list!!.get(0).main != null
                 it.list!!.get(0).weather != null
                 it.list!!.get(0).wind != null
+            })
+    }
+
+    @Test
+    fun `Test getCityWeatherDataService API should not null`() {
+        assertNotNull(service.getCityWeatherDataService("Bengaluru", "2332e23333"))
+    }
+
+    @Test
+    fun `Test getCityWeatherDataService data items are not null`() {
+        assertNotNull(service.getCityWeatherDataService("Bengaluru", "2332e23333")
+            .test()
+            .assertComplete()
+            .assertValue {
+                it.base != null
+                it.name != null
+                it.clouds!!.all != null
+                it.visibility != null
+                it.sys != null
+                it.weather != null
+                it.wind != null
+                it.id != null
             })
     }
 }

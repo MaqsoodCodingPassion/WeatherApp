@@ -9,6 +9,8 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.openweathermap.org.adapter.CitiesAdapter
+import com.openweathermap.org.adapter.Forecast5Days3HoursAdapter
 import com.openweathermap.org.gps.GpsUtils
 import com.openweathermap.org.gps.LocationViewModel
 import com.openweathermap.org.model.CurrentWeatherResponse
@@ -52,9 +54,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAdapter() {
         citiesWeatherList = ArrayList<CurrentWeatherResponse>()
-        citiesAdapter = CitiesAdapter(citiesWeatherList!!)
+        citiesAdapter =
+            CitiesAdapter(citiesWeatherList!!)
         foreCast5DaysDataList = ArrayList<ListItem>()
-        foreCast5DaysAdapter = Forecast5Days3HoursAdapter(foreCast5DaysDataList!!)
+        foreCast5DaysAdapter =
+            Forecast5Days3HoursAdapter(
+                foreCast5DaysDataList!!
+            )
 
         citiesRecyclerView.layoutManager = LinearLayoutManager(this)
         citiesRecyclerView.adapter = citiesAdapter

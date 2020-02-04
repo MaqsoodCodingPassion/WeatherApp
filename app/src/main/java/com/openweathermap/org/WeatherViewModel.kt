@@ -17,7 +17,32 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
     var compositeDisposable = CompositeDisposable()
     var currentWeatherResponse: MutableLiveData<CurrentWeatherResponse> = MutableLiveData()  //Forecast5days3hoursResponse
     var forecast5days3hoursResponse: MutableLiveData<Forecast5days3hoursResponse> = MutableLiveData()
+    var multipleCitiesWeatherResponse: MutableLiveData<List<CurrentWeatherResponse>> = MutableLiveData()
 
+
+    /*fun fetchMultipleCitiesWeatherData(
+        citiesList: ArrayList<String?>, apiKey: String) {
+
+        compositeDisposable += Observable.fromIterable(citiesList).flatMap {
+            repository.fetchCityWeatherData(it, apiKey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+        }.toList()
+            .subscribeWith(object : DisposableObserver<List<CurrentWeatherResponse>>() {
+
+                override fun onNext(data: List<CurrentWeatherResponse>) {
+                    multipleCitiesWeatherResponse.value = data
+                }
+
+                override fun onComplete() {
+
+                }
+
+                override fun onError(e: Throwable) {
+                    multipleCitiesWeatherResponse.value = null
+                }
+            })
+    }*/
 
     /*
        Taking list with multiple cities and calling APIs in parallel

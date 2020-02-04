@@ -1,16 +1,25 @@
-package com.openweathermap.org
+package com.openweathermap.org.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.openweathermap.org.R
 import com.openweathermap.org.model.ListItem
 import kotlinx.android.synthetic.main.forecast_row_item.view.*
 
 class Forecast5Days3HoursAdapter(var weatherList:List<ListItem>) :RecyclerView.Adapter<ForeCastViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForeCastViewHolder {
-        return ForeCastViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.forecast_row_item, parent, false))
+        return ForeCastViewHolder(
+            LayoutInflater.from(
+                parent.context
+            ).inflate(
+                R.layout.forecast_row_item,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {

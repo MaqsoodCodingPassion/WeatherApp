@@ -1,10 +1,5 @@
 package com.openweathermap.org
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.openweathermap.org.model.CurrentWeatherResponse
-import com.openweathermap.org.model.Forecast5days3hoursResponse
-import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

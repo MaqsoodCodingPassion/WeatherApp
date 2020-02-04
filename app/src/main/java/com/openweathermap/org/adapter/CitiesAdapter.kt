@@ -1,16 +1,26 @@
-package com.openweathermap.org
+package com.openweathermap.org.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.openweathermap.org.R
 import com.openweathermap.org.model.CurrentWeatherResponse
+import com.openweathermap.org.showView
 import kotlinx.android.synthetic.main.forecast_row_item.view.*
 
 class CitiesAdapter(var weatherList:List<CurrentWeatherResponse>) :RecyclerView.Adapter<CitiesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitiesViewHolder {
-        return CitiesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.forecast_row_item, parent, false))
+        return CitiesViewHolder(
+            LayoutInflater.from(
+                parent.context
+            ).inflate(
+                R.layout.forecast_row_item,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {

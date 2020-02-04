@@ -28,9 +28,4 @@ interface Service {
     @GET("forecast")
     fun getForecast5Days3HoursService(@Query("q") cityName: String, @Query("appid") appid: String)
             : Observable<Forecast5days3hoursResponse>
-
-    fun getForecast5Days3HoursService1(
-        cityName: String,
-        apiKey: String
-    ): Observable<List<CurrentWeatherResponse>>
 }

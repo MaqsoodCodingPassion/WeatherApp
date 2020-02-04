@@ -16,7 +16,7 @@ interface Service {
             : Observable<CurrentWeatherResponse>
 
     /*
-       Getting the current location details w.r.t current lat long
+       Getting the current city name details w.r.t current lat long
      */
     @GET("weather")
     fun getCurrentWeatherDetailsService(@Query("lat") lat: String, @Query("lon") lon: String, @Query("appid") appid: String)

@@ -23,8 +23,8 @@ class CitiesAdapter(var weatherList:List<CurrentWeatherResponse>) :RecyclerView.
         holder.tempMax.text = weatherList.get(position).main?.tempMax.toString()
         holder.weather.text = weatherList.get(position).weather?.get(0)?.description
         holder.wind.text = weatherList.get(position).wind?.speed.toString()
-        holder.dateLabel.visibility = View.GONE
-        holder.date.visibility = View.GONE
+        holder.dateLabel.showView(false)
+        holder.date.showView(false)
     }
 
     fun setDataList(weatherList: List<CurrentWeatherResponse>?) {

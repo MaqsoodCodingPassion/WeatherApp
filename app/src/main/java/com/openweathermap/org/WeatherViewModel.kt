@@ -11,17 +11,19 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
 class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
-
 
     var compositeDisposable = CompositeDisposable()
     var currentWeatherResponse: MutableLiveData<CurrentWeatherResponse> = MutableLiveData()  //Forecast5days3hoursResponse
     var forecast5days3hoursResponse: MutableLiveData<Forecast5days3hoursResponse> = MutableLiveData()
 
+
+    /*
+       Taking list with multiple cities and calling APIs in parallel
+     */
     fun fetchMultipleCitiesWeatherData(
-        citiesList: ArrayList<String?>,
+        citiesList: List<String?>,
         apiKey: String
     ): LiveData<List<CurrentWeatherResponse>> {
 
@@ -43,6 +45,9 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
         return weatherResponse
     }
 
+    /*
+      fetching current city name using current lat long API
+     */
     fun fetchCurrentLocationDetails(lat: String, long: String, apiKey: String) {
 
         compositeDisposable += repository.fetchCurrentWeatherDetails(lat, long, apiKey)
@@ -62,6 +67,11 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
 
             })
     }
+
+
+    /*
+      fetching 5 days and 3 hours each w.t.r city name
+     */
 
     fun fetchForeCast5Days3HoursData(cityName: String, apiKey: String) {
 
@@ -83,11 +93,16 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
             })
     }
 
+    /*
+       Adding disposables using extension function
+     */
     operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
         add(disposable)
     }
 
-
+    /*
+       clearing all disposables
+     */
     override fun onCleared() {
         super.onCleared()
         if (!compositeDisposable.isDisposed) {

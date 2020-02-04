@@ -28,12 +28,4 @@ class WeatherRepository @Inject constructor(private val service: Service) {
     fun fetchForecast5Days3Hours(cityName: String, apiKey: String): Observable<Forecast5days3hoursResponse> {
         return service.getForecast5Days3HoursService(cityName, apiKey)
     }
-
-
-    /*
-      Getting the forecast details of 5 days with each 3 hours
-    */
-    fun fetchForecast5Days3Hours1(cityName: String, apiKey: String): Observable<List<CurrentWeatherResponse>> {
-        return service.getForecast5Days3HoursService1(cityName, apiKey)
-    }
 }

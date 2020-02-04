@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         })
         initAdapter()
         searchBtn.setOnClickListener{callCurrentWeatherAPI()}
-        getCurrentCityNameFromAPI()
+        callCurrentCityNameAPI()
     }
 
     private fun initAdapter() {
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GPS_REQUEST) {
                 isGPSEnabled = true
-                getCurrentCityNameFromAPI()
+                callCurrentCityNameAPI()
             }
         }
     }
@@ -94,33 +93,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun currentLocationObservalableLiveData() {
+    private fun currentLocationObservableLiveData() {
         foreCast5DaysDataList?.clear()
         weatherViewModel.currentWeatherResponse.observe(this, Observer {
             if (it != null) {
                 cityName.text = it.name.toString()
                 weatherViewModel.fetchForeCast5Days3HoursData(it.name.toString(),API_KEY)
-                forecast5Days3HourObservalableLiveData()
+                forecast5Days3HourObservableLiveData()
             }
         })
     }
 
-    private fun forecast5Days3HourObservalableLiveData() {
+    private fun forecast5Days3HourObservableLiveData() {
         weatherViewModel.forecast5days3hoursResponse.observe(this, Observer {
             if(it!=null){
-                progressBar.visibility = View.GONE
+                progressBar.showView(false)
                 it.list?.let { it1 -> foreCast5DaysAdapter?.setDataList(it1) }
                 foreCast5DaysAdapter!!.notifyDataSetChanged()
             }
         })
     }
 
-    private fun getCitiesList(): ArrayList<String?> {
+    private fun getCitiesList(): List<String?> {
         val values = citiesField.query.toString().split(",")
         return ArrayList<String?>(values)
     }
 
-    private fun getCurrentCityNameFromAPI() {
+    private fun callCurrentCityNameAPI() {
         when {
             isPermissionsGranted(this) -> startLocationUpdate()
             else -> ActivityCompat.requestPermissions(
@@ -138,7 +137,7 @@ class MainActivity : AppCompatActivity() {
             LONG = it.longitude.toString()
             if(count==0){
                 weatherViewModel.fetchCurrentLocationDetails(LAT!!,LONG!!,API_KEY)
-                currentLocationObservalableLiveData()
+                currentLocationObservableLiveData()
                 count++
             }
         })
@@ -148,7 +147,7 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             LOCATION_REQUEST -> {
-                getCurrentCityNameFromAPI()
+                callCurrentCityNameAPI()
             }
         }
     }

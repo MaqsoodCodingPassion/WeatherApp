@@ -1,7 +1,6 @@
 package com.openweathermap.org
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -19,7 +18,6 @@ import com.openweathermap.org.util.ViewModelFactory
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
@@ -96,18 +94,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCurrentLocationDetailsAPI(lat: String?,long: String?) {
+    private fun currentLocationObservalableLiveData() {
         foreCast5DaysDataList?.clear()
-        weatherViewModel.fetchCurrentLocationDetails(lat!!,long!!,API_KEY).observe(this, Observer {
-            if(it!=null){
+        weatherViewModel.currentWeatherResponse.observe(this, Observer {
+            if (it != null) {
                 cityName.text = it.name.toString()
-                getForcast5Days3HoursAPI(it.name)
+                weatherViewModel.fetchForeCast5Days3HoursData(it.name.toString(),API_KEY)
+                forecast5Days3HourObservalableLiveData()
             }
         })
     }
 
-    private fun getForcast5Days3HoursAPI(cityName: String?) {
-        weatherViewModel.fetchForeCast5Days3HoursData(cityName!!,API_KEY).observe(this, Observer {
+    private fun forecast5Days3HourObservalableLiveData() {
+        weatherViewModel.forecast5days3hoursResponse.observe(this, Observer {
             if(it!=null){
                 progressBar.visibility = View.GONE
                 it.list?.let { it1 -> foreCast5DaysAdapter?.setDataList(it1) }
@@ -138,13 +137,13 @@ class MainActivity : AppCompatActivity() {
             LAT = it.latitude.toString()
             LONG = it.longitude.toString()
             if(count==0){
-                getCurrentLocationDetailsAPI(LAT,LONG)
+                weatherViewModel.fetchCurrentLocationDetails(LAT!!,LONG!!,API_KEY)
+                currentLocationObservalableLiveData()
                 count++
             }
         })
     }
 
-    @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {

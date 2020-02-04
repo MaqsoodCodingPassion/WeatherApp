@@ -5,11 +5,10 @@ import com.google.gson.reflect.TypeToken
 import com.openweathermap.org.model.CurrentWeatherResponse
 import com.openweathermap.org.model.Forecast5days3hoursResponse
 import com.openweathermap.org.service.Service
-import io.reactivex.Single
-import org.junit.Test
-
-import org.junit.Assert.*
+import io.reactivex.Observable
+import org.junit.Assert.assertNotNull
 import org.junit.Before
+import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
@@ -32,13 +31,13 @@ class WeatherAPIsTest {
         val turnsType1 = object : TypeToken<CurrentWeatherResponse>() {}.type
         this.currentWeatherResponse = Gson().fromJson<CurrentWeatherResponse>(currentWeatherResponse, turnsType1)
         Mockito.`when`(service.getCurrentWeatherDetailsService("3222.222", "223.2", "2332e23333"))
-            .thenReturn(Single.just(this.currentWeatherResponse))
+            .thenReturn(Observable.just(this.currentWeatherResponse))
 
 
         val turnsType2 = object : TypeToken<Forecast5days3hoursResponse>() {}.type
         this.forecast5days3hoursResponse = Gson().fromJson<Forecast5days3hoursResponse>(forecast5days3hoursResponse, turnsType2)
         Mockito.`when`(service.getForecast5Days3HoursService("Bengaluru", "2332e23333"))
-            .thenReturn(Single.just(this.forecast5days3hoursResponse))
+            .thenReturn(Observable.just(this.forecast5days3hoursResponse))
 
 
     }

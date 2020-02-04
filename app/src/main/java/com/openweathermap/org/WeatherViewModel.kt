@@ -1,6 +1,5 @@
 package com.openweathermap.org
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,10 +7,18 @@ import com.openweathermap.org.model.CurrentWeatherResponse
 import com.openweathermap.org.model.Forecast5days3hoursResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
+
+
+    var compositeDisposable = CompositeDisposable()
+    var currentWeatherResponse: MutableLiveData<CurrentWeatherResponse> = MutableLiveData()  //Forecast5days3hoursResponse
+    var forecast5days3hoursResponse: MutableLiveData<Forecast5days3hoursResponse> = MutableLiveData()
 
     fun fetchMultipleCitiesWeatherData(
         citiesList: ArrayList<String?>,
@@ -36,48 +43,56 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
         return weatherResponse
     }
 
-    fun fetchCurrentLocationDetails(
-        lat: String, long: String, apiKey: String
-    ): MutableLiveData<CurrentWeatherResponse> {
+    fun fetchCurrentLocationDetails(lat: String, long: String, apiKey: String) {
 
-        val weatherResponse: MutableLiveData<CurrentWeatherResponse> = MutableLiveData()
-        val observable = repository.fetchCurrentWeatherDetails(lat, long, apiKey)
-
-        observable.map<CurrentWeatherResponse> {
-            it
-        }.subscribeOn(Schedulers.io())
+        compositeDisposable += repository.fetchCurrentWeatherDetails(lat, long, apiKey)
+            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    weatherResponse.value = it
-                },
-                {
-                    weatherResponse.value = null
-                })
+            .subscribeWith(object : DisposableObserver<CurrentWeatherResponse>() {
+                override fun onComplete() {
+                }
 
-        return weatherResponse
+                override fun onNext(data: CurrentWeatherResponse) {
+                    currentWeatherResponse.value = data
+                }
+
+                override fun onError(e: Throwable) {
+                    currentWeatherResponse.value = null
+                }
+
+            })
     }
 
-    fun fetchForeCast5Days3HoursData(
-        cityName: String,
-        apiKey: String
-    ): LiveData<Forecast5days3hoursResponse> {
+    fun fetchForeCast5Days3HoursData(cityName: String, apiKey: String) {
 
-        val weatherResponse: MutableLiveData<Forecast5days3hoursResponse> = MutableLiveData()
-        val observable = repository.fetchForecast5Days3Hours(cityName, apiKey)
-
-        observable.map<Forecast5days3hoursResponse> {
-            it
-        }.subscribeOn(Schedulers.io())
+        compositeDisposable += repository.fetchForecast5Days3Hours(cityName, apiKey)
+            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    weatherResponse.value = it
-                },
-                {
-                    weatherResponse.value = null
-                })
+            .subscribeWith(object : DisposableObserver<Forecast5days3hoursResponse>() {
+                override fun onComplete() {
+                }
 
-        return weatherResponse
+                override fun onNext(data: Forecast5days3hoursResponse) {
+                    forecast5days3hoursResponse.value = data
+                }
+
+                override fun onError(e: Throwable) {
+                    forecast5days3hoursResponse.value = null
+                }
+
+            })
+    }
+
+    operator fun CompositeDisposable.plusAssign(disposable: Disposable) {
+        add(disposable)
+    }
+
+
+    override fun onCleared() {
+        super.onCleared()
+        if (!compositeDisposable.isDisposed) {
+            compositeDisposable.dispose()
+        }
     }
 }
+

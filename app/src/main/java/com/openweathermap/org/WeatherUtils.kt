@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.net.ConnectivityManager
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
@@ -46,12 +45,3 @@ fun isPermissionsGranted(context: Context) =
                 context,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
-
-fun shouldShowRequestPermissionRationale(activity: Activity) =
-    ActivityCompat.shouldShowRequestPermissionRationale(
-        activity,
-        Manifest.permission.ACCESS_FINE_LOCATION
-    ) && ActivityCompat.shouldShowRequestPermissionRationale(
-        activity,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    )

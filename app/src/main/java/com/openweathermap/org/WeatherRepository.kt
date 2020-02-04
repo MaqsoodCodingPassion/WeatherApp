@@ -4,7 +4,6 @@ import com.openweathermap.org.model.CurrentWeatherResponse
 import com.openweathermap.org.model.Forecast5days3hoursResponse
 import com.openweathermap.org.service.Service
 import io.reactivex.Observable
-import io.reactivex.Single
 import javax.inject.Inject
 
 class WeatherRepository @Inject constructor(private val service: Service) {
@@ -19,14 +18,22 @@ class WeatherRepository @Inject constructor(private val service: Service) {
     /*
       Getting the current location details w.r.t current lat long
     */
-    fun fetchCurrentWeatherDetails(lat: String, long: String, apiKey: String): Single<CurrentWeatherResponse> {
+    fun fetchCurrentWeatherDetails(lat: String, long: String, apiKey: String): Observable<CurrentWeatherResponse> {
         return service.getCurrentWeatherDetailsService(lat, long, apiKey)
     }
 
     /*
       Getting the forecast details of 5 days with each 3 hours
     */
-    fun fetchForecast5Days3Hours(cityName: String, apiKey: String): Single<Forecast5days3hoursResponse> {
+    fun fetchForecast5Days3Hours(cityName: String, apiKey: String): Observable<Forecast5days3hoursResponse> {
         return service.getForecast5Days3HoursService(cityName, apiKey)
+    }
+
+
+    /*
+      Getting the forecast details of 5 days with each 3 hours
+    */
+    fun fetchForecast5Days3Hours1(cityName: String, apiKey: String): Observable<List<CurrentWeatherResponse>> {
+        return service.getForecast5Days3HoursService1(cityName, apiKey)
     }
 }

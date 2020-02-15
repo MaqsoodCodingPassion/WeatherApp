@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface Service {
 
     /*
-       Getting the details w.r.t city name
+      Getting the details w.r.t city name
     */
     @GET("weather")
     fun getCityWeatherDataService(@Query("q") lat: String, @Query("appid") appid: String)

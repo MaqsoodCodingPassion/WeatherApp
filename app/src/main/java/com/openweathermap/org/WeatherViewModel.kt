@@ -1,7 +1,5 @@
 package com.openweathermap.org
 
-import android.annotation.SuppressLint
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.openweathermap.org.model.CurrentWeatherResponse
@@ -15,37 +13,31 @@ import io.reactivex.schedulers.Schedulers
 
 class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
 
-    var compositeDisposable = CompositeDisposable()
-    var currentWeatherResponse: MutableLiveData<CurrentWeatherResponse> =
-        MutableLiveData() 
-    var forecast5days3hoursResponse: MutableLiveData<Forecast5days3hoursResponse> =
-        MutableLiveData()
+    private val compositeDisposable = CompositeDisposable()
+    val currentWeatherResponse: MutableLiveData<CurrentWeatherResponse> = MutableLiveData()
+    val forecast5days3hoursResponse: MutableLiveData<Forecast5days3hoursResponse> = MutableLiveData()
+    val multipleCitiesWeatherResponse: MutableLiveData<List<CurrentWeatherResponse>> = MutableLiveData()
 
     /*
-       Taking list with multiple cities and calling APIs in parallel
+      Taking list with multiple cities and calling APIs in parallel
      */
-    @SuppressLint("CheckResult")
-    fun fetchMultipleCitiesWeatherData (
+    fun fetchMultipleCitiesWeatherData(
         citiesList: List<String?>,
         apiKey: String
-    ): LiveData<List<CurrentWeatherResponse>> {
-
-        val weatherResponse: MutableLiveData<List<CurrentWeatherResponse>> = MutableLiveData()
-
-        Observable.fromIterable(citiesList).flatMap {
+    ) {
+        compositeDisposable += Observable.fromIterable(citiesList).flatMap {
             repository.fetchCityWeatherData(it, apiKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
         }.toList()
             .subscribe(
                 {
-                    weatherResponse.value = it
+                    multipleCitiesWeatherResponse.value = it
                 }, {
                     it.printStackTrace()
-                    weatherResponse.value = null
+                    multipleCitiesWeatherResponse.value = null
                 }
             )
-        return weatherResponse
     }
 
     /*
@@ -75,7 +67,6 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
     /*
       fetching 5 days and 3 hours each w.t.r city name
      */
-
     fun fetchForeCast5Days3HoursData(cityName: String, apiKey: String) {
 
         compositeDisposable += repository.fetchForecast5Days3Hours(cityName, apiKey)

@@ -36,7 +36,6 @@ class GpsUtils(private val context: Context) {
             settingsClient
                 .checkLocationSettings(locationSettingsRequest)
                 .addOnSuccessListener(context as Activity) {
-                    //  GPS is already enable, callback GPS status through listener
                     OnGpsListener?.gpsStatus(true)
                 }
                 .addOnFailureListener(context) { e ->

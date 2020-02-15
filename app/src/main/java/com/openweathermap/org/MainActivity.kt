@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private var foreCast5DaysDataList :ArrayList<ListItem>? = null
     private var foreCast5DaysAdapter : Forecast5Days3HoursAdapter? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    public override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,7 +48,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
         initAdapter()
-        searchBtn.setOnClickListener{callMultipleCitiesWeather()}
+        searchBtn.setOnClickListener{callMultipleCitiesWeather()
+            multipleCitiesObservableLiveData()}
 
         searchViewSetUp()
         citiesField.requestFocusFromTouch()
@@ -63,10 +64,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initAdapter() {
-        citiesWeatherList = ArrayList<CurrentWeatherResponse>()
+        citiesWeatherList = ArrayList()
         citiesAdapter =
             CitiesAdapter(citiesWeatherList!!)
-        foreCast5DaysDataList = ArrayList<ListItem>()
+        foreCast5DaysDataList = ArrayList()
         foreCast5DaysAdapter =
             Forecast5Days3HoursAdapter(
                 foreCast5DaysDataList!!
@@ -89,11 +90,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun callMultipleCitiesWeather() {
+        weatherViewModel.fetchMultipleCitiesWeatherData(getCitiesList(),API_KEY)
+    }
+
+    private fun multipleCitiesObservableLiveData() {
         when {
             getCitiesList().size in 3..7 -> {
                 searchBtn.isEnabled = false
                 citiesWeatherList?.clear()
-                weatherViewModel.fetchMultipleCitiesWeatherData(getCitiesList(),API_KEY).observe(this, Observer {
+                weatherViewModel.multipleCitiesWeatherResponse.observe(this, Observer {
                     searchBtn.isEnabled = true
                     hideKeyboard(this)
                     if(it!=null){
@@ -172,7 +177,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
 const val LOCATION_REQUEST = 100
 const val GPS_REQUEST = 101
 

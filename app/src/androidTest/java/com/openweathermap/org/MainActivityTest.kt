@@ -35,9 +35,9 @@ class MainActivityTest {
     fun setUp() {
         this.device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         citiesRecyclerView =
-            mainActivityTestRule.activity.findViewById<RecyclerView>(R.id.citiesRecyclerView)
+            mainActivityTestRule.activity.findViewById(R.id.citiesRecyclerView)
         fiveDaysDataRecyclerView =
-            mainActivityTestRule.activity.findViewById<RecyclerView>(R.id.fiveDaysDataRecyclerView)
+            mainActivityTestRule.activity.findViewById(R.id.fiveDaysDataRecyclerView)
     }
 
     @Test

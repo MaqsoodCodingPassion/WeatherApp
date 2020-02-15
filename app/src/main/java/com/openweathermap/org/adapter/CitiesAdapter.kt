@@ -13,9 +13,7 @@ class CitiesAdapter(var weatherList:List<CurrentWeatherResponse>) :RecyclerView.
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitiesViewHolder {
         return CitiesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.forecast_row_item,
-                parent,
-                false
-            )
+                parent, false)
         )
     }
 

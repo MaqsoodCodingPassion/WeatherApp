@@ -19,11 +19,11 @@ class GpsUtils(private val context: Context) {
 
     private val settingsClient: SettingsClient = LocationServices.getSettingsClient(context)
     private val locationSettingsRequest: LocationSettingsRequest?
-    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private val locationManager =
+        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
     init {
-        val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(LocationLiveData.locationRequest)
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(LocationLiveData.locationRequest)
         locationSettingsRequest = builder.build()
         builder.setAlwaysShow(true)
     }
@@ -46,7 +46,8 @@ class GpsUtils(private val context: Context) {
                                 // Show the dialog by calling startResolutionForResult(), and check the
                                 // result in onActivityResult().
                                 val rae = e as ResolvableApiException
-                                rae.startResolutionForResult(context,
+                                rae.startResolutionForResult(
+                                    context,
                                     GPS_REQUEST
                                 )
                             } catch (sie: IntentSender.SendIntentException) {
@@ -54,10 +55,8 @@ class GpsUtils(private val context: Context) {
                             }
 
                         LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
-                            val errorMessage =
-                                "Location settings are inadequate, and cannot be " + "fixed here. Fix in Settings."
+                            val errorMessage = "Location settings are inadequate, and cannot be " + "fixed here. Fix in Settings."
                             Log.e(TAG, errorMessage)
-
                             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
                         }
                     }

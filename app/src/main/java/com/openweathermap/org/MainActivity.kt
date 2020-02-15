@@ -28,12 +28,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var locationViewModel: LocationViewModel
     private var isGPSEnabled = false
-    private var LAT:String? = null
-    private var LONG:String? = null
-    private var citiesWeatherList :ArrayList<CurrentWeatherResponse>? = null
-    private var citiesAdapter : CitiesAdapter? = null
-    private var foreCast5DaysDataList :ArrayList<ListItem>? = null
-    private var foreCast5DaysAdapter : Forecast5Days3HoursAdapter? = null
+    private var latitude: String? = null
+    private var longitude: String? = null
+    private var citiesWeatherList: ArrayList<CurrentWeatherResponse>? = null
+    private var citiesAdapter: CitiesAdapter? = null
+    private var foreCast5DaysDataList: ArrayList<ListItem>? = null
+    private var foreCast5DaysAdapter: Forecast5Days3HoursAdapter? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -48,8 +48,11 @@ class MainActivity : AppCompatActivity() {
             }
         })
         initAdapter()
-        searchBtn.setOnClickListener{callMultipleCitiesWeather()
-            multipleCitiesObservableLiveData()}
+        searchBtn.setOnClickListener {
+
+            callMultipleCitiesWeather()
+            multipleCitiesObservableLiveData()
+        }
 
         searchViewSetUp()
         citiesField.requestFocusFromTouch()
@@ -65,13 +68,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAdapter() {
         citiesWeatherList = ArrayList()
-        citiesAdapter =
-            CitiesAdapter(citiesWeatherList!!)
+        citiesAdapter = CitiesAdapter(citiesWeatherList!!)
         foreCast5DaysDataList = ArrayList()
-        foreCast5DaysAdapter =
-            Forecast5Days3HoursAdapter(
-                foreCast5DaysDataList!!
-            )
+        foreCast5DaysAdapter = Forecast5Days3HoursAdapter(foreCast5DaysDataList!!)
 
         citiesRecyclerView.layoutManager = LinearLayoutManager(this)
         citiesRecyclerView.adapter = citiesAdapter
@@ -90,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun callMultipleCitiesWeather() {
-        weatherViewModel.fetchMultipleCitiesWeatherData(getCitiesList(),API_KEY)
+        weatherViewModel.fetchMultipleCitiesWeatherData(getCitiesList(), API_KEY)
     }
 
     private fun multipleCitiesObservableLiveData() {
@@ -101,19 +100,19 @@ class MainActivity : AppCompatActivity() {
                 weatherViewModel.multipleCitiesWeatherResponse.observe(this, Observer {
                     searchBtn.isEnabled = true
                     hideKeyboard(this)
-                    if(it!=null){
-                        citiesAdapter!!.setDataList(it)
-                        citiesAdapter!!.notifyDataSetChanged()
-                    }else{
-                        showErrorDialog(this,"Please enter the proper city name with separated comma")
+                    if (it != null) {
+                        this.citiesAdapter!!.setDataList(it)
+                        this.citiesAdapter!!.notifyDataSetChanged()
+                    } else {
+                        showErrorDialog(this, "Please enter the proper city name with separated comma")
                     }
                 })
             }
             getCitiesList().size < 3 -> {
-                showErrorDialog(this,"Please enter the minimum 3 cities separated with comma")
+                showErrorDialog(this, "Please enter the minimum 3 cities separated with comma")
             }
             else -> {
-                showErrorDialog(this,"Please do not enter more than 7 cities")
+                showErrorDialog(this, "Please do not enter more than 7 cities")
             }
         }
     }
@@ -123,18 +122,24 @@ class MainActivity : AppCompatActivity() {
         weatherViewModel.currentWeatherResponse.observe(this, Observer {
             if (it != null) {
                 cityName.text = it.name.toString()
-                weatherViewModel.fetchForeCast5Days3HoursData(it.name.toString(),API_KEY)
+                weatherViewModel.fetchForeCast5Days3HoursData(it.name.toString(), API_KEY)
                 forecast5Days3HourObservableLiveData()
+            } else {
+                //Need to handle proper error
+                showErrorDialog(this, "oops something went wrong, please try after sometime")
             }
         })
     }
 
     private fun forecast5Days3HourObservableLiveData() {
         weatherViewModel.forecast5days3hoursResponse.observe(this, Observer {
-            if(it!=null){
+            if (it != null) {
                 progressBar.showView(false)
                 it.list?.let { it1 -> foreCast5DaysAdapter?.setDataList(it1) }
                 foreCast5DaysAdapter!!.notifyDataSetChanged()
+            } else {
+                //Need to handle proper error
+                showErrorDialog(this, "oops something went wrong, please try after sometime")
             }
         })
     }
@@ -147,36 +152,37 @@ class MainActivity : AppCompatActivity() {
     private fun callCurrentCityNameAPI() {
         when {
             isPermissionsGranted(this) -> startLocationUpdate()
-            else -> ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-                LOCATION_REQUEST
+            else -> ActivityCompat.requestPermissions(this, arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION), LOCATION_REQUEST
             )
         }
     }
 
     private fun startLocationUpdate() {
-        var count: Int =0
+        var count: Int = 0
         locationViewModel.getLocationData().observe(this, Observer {
-            LAT = it.latitude.toString()
-            LONG = it.longitude.toString()
-            if(count==0){
-                weatherViewModel.fetchCurrentLocationDetails(LAT!!,LONG!!,API_KEY)
+            this.latitude = it.latitude.toString()
+            this.longitude = it.longitude.toString()
+            if (count == 0) {
+                weatherViewModel.fetchCurrentLocationDetails(latitude!!, longitude!!, API_KEY)
                 currentLocationObservableLiveData()
                 count++
             }
         })
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) { super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            LOCATION_REQUEST -> {
-                callCurrentCityNameAPI()
-            }
+            LOCATION_REQUEST -> { callCurrentCityNameAPI() }
         }
     }
 }
+
 const val LOCATION_REQUEST = 100
 const val GPS_REQUEST = 101
 

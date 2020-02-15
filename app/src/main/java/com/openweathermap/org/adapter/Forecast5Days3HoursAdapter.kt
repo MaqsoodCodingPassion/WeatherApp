@@ -11,12 +11,7 @@ import kotlinx.android.synthetic.main.forecast_row_item.view.*
 class Forecast5Days3HoursAdapter(var weatherList:List<ListItem>) :RecyclerView.Adapter<ForeCastViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForeCastViewHolder {
-        return ForeCastViewHolder(
-            LayoutInflater.from(
-                parent.context
-            ).inflate(
-                R.layout.forecast_row_item,
-                parent,
+        return ForeCastViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.forecast_row_item, parent,
                 false
             )
         )

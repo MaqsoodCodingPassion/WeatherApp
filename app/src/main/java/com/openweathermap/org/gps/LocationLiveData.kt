@@ -1,6 +1,5 @@
 package com.openweathermap.org.gps
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import androidx.lifecycle.LiveData
@@ -18,26 +17,17 @@ class LocationLiveData(context: Context) : LiveData<LocationModel>() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-
-    @SuppressLint("MissingPermission")
     override fun onActive() {
         super.onActive()
         fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                location?.also {
-                    setLocationData(it)
+            .addOnSuccessListener { location: Location? -> location?.also { setLocationData(it)
                 }
             }
         startLocationUpdates()
     }
 
-    @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            null
-        )
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
     }
 
     private val locationCallback = object : LocationCallback() {

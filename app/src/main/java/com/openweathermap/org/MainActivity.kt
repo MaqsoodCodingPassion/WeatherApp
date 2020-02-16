@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private var citiesAdapter: CitiesAdapter? = null
     private var foreCast5DaysDataList: ArrayList<ListItem>? = null
     private var foreCast5DaysAdapter: Forecast5Days3HoursAdapter? = null
+    private var citiesNameList = ArrayList<String>()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -49,13 +50,23 @@ class MainActivity : AppCompatActivity() {
         })
         initAdapter()
         searchBtn.setOnClickListener {
-            callMultipleCitiesWeather()
-            multipleCitiesObservableLiveData()
+            if(isMinimum3Cities()){
+                weatherViewModel.fetchMultipleCitiesWeatherData(citiesNameList, API_KEY)
+                multipleCitiesObservableLiveData()
+            }else{
+                showErrorDialog(this, getString(R.string.multipleCityNamesHint))
+            }
         }
 
         searchViewSetUp()
         citiesField.requestFocusFromTouch()
         callCurrentCityNameAPI()
+    }
+
+    private fun isMinimum3Cities(): Boolean {
+        val values = citiesField.query.toString().split(",")
+        citiesNameList = ArrayList(values)
+        return ArrayList<String?>(values).size in 3..7
     }
 
     private fun searchViewSetUp() {
@@ -87,33 +98,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun callMultipleCitiesWeather() {
-        weatherViewModel.fetchMultipleCitiesWeatherData(getCitiesList(), API_KEY)
-    }
-
     private fun multipleCitiesObservableLiveData() {
-        when {
-            getCitiesList().size in 3..7 -> {
-                searchBtn.isEnabled = false
-                citiesWeatherList?.clear()
-                weatherViewModel.multipleCitiesWeatherResponse.observe(this, Observer { response ->
-                    searchBtn.isEnabled = true
-                    hideKeyboard(this)
-                    if (response.isNotEmpty()) {
-                        this.citiesAdapter!!.setDataList(response)
-                        this.citiesAdapter!!.notifyDataSetChanged()
-                    } else if(response.isEmpty()){
-                        showErrorDialog(this, getString(R.string.multipleCityNamesHint))
-                    }
-                })
+        searchBtn.isEnabled = false
+        citiesWeatherList?.clear()
+        weatherViewModel.multipleCitiesWeatherResponse.observe(this, Observer { response ->
+            searchBtn.isEnabled = true
+            hideKeyboard(this)
+            if (response.isNotEmpty()) {
+                this.citiesAdapter!!.setDataList(response)
+                this.citiesAdapter!!.notifyDataSetChanged()
+            } else if(response.isEmpty()){
+                showErrorDialog(this, getString(R.string.multipleCityNamesHint))
             }
-            getCitiesList().size < 3 -> {
-                showErrorDialog(this, getString(R.string.minimum3CityNamesHint))
-            }
-            else -> {
-                showErrorDialog(this, getString(R.string.cityNamesExceedHint))
-            }
-        }
+        })
     }
 
     private fun currentLocationObservableLiveData() {
@@ -141,11 +138,6 @@ class MainActivity : AppCompatActivity() {
                 showErrorDialog(this, "oops something went wrong, please try after sometime")
             }
         })
-    }
-
-    private fun getCitiesList(): List<String?> {
-        val values = citiesField.query.toString().split(",")
-        return ArrayList<String?>(values)
     }
 
     private fun callCurrentCityNameAPI() {

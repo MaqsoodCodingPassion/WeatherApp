@@ -11,7 +11,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
-class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
+class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val currentWeatherResponse: MutableLiveData<CurrentWeatherResponse> = MutableLiveData()

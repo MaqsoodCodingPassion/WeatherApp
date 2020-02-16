@@ -20,8 +20,12 @@ As per the acceptance criteria i have covered all the steps :
   step 1 :  Taking list from UI with multiple cities and calling APIs in parallel then feeding the response to UI
   step 2 :  Part A: Fetching current city name using current lat long API
             Part B: Fetching 5 days and 3 hours each w.t.r city name
-            
-Tested APIs with local json files 
+
+Test cases : 
+- Tested ViewModel       
+- Tested APIs with local json files 
+- Tested model
+- Tested basic UI using Espresso 
 
 Error Handling :
        - Handled basic UI error handling w.r.t requirement

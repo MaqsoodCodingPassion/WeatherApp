@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableObserver
+import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 
 class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() {
@@ -45,16 +45,13 @@ class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() 
         compositeDisposable += repository.fetchCurrentWeatherDetails(lat, long, apiKey)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(object : DisposableObserver<CurrentWeatherResponse>() {
-                override fun onComplete() {
-                }
-                override fun onNext(data: CurrentWeatherResponse) {
+            .subscribeWith(object : DisposableSingleObserver<CurrentWeatherResponse>() {
+                override fun onSuccess(data: CurrentWeatherResponse) {
                     currentWeatherResponse.value = data
                 }
                 override fun onError(e: Throwable) {
                     currentWeatherResponse.value = null
                 }
-
             })
     }
 
@@ -65,16 +62,14 @@ class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() 
         compositeDisposable += repository.fetchForecast5Days3Hours(cityName, apiKey)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(object : DisposableObserver<Forecast5days3hoursResponse>() {
-                override fun onComplete() {
-                }
-                override fun onNext(data: Forecast5days3hoursResponse) {
+            .subscribeWith(object : DisposableSingleObserver<Forecast5days3hoursResponse>() {
+                override fun onSuccess(data: Forecast5days3hoursResponse) {
                     forecast5days3hoursResponse.value = data
                 }
+
                 override fun onError(e: Throwable) {
                     forecast5days3hoursResponse.value = null
                 }
-
             })
     }
 

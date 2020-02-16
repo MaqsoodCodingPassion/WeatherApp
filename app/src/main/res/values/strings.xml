@@ -27,6 +27,5 @@
     <string name="searchHint">Enter the cities name with comma</string>
     <string name="minimum3CityNamesHint">Please enter the minimum 3 cities separated with comma</string>
     <string name="cityNamesExceedHint">Please do not enter more than 7 cities</string>
-
     <string name="multipleCityNamesHint">Please enter the minimum 3 cities and max 7 with separated comma</string>
 </resources>

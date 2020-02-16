@@ -42,25 +42,41 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         locationViewModel = ViewModelProviders.of(this).get(LocationViewModel::class.java)
         weatherViewModel = ViewModelProviders.of(this, viewModelFactory).get(WeatherViewModel::class.java)
-        GpsUtils(this).turnGPSOn(object : GpsUtils.OnGpsListener {
 
+        GpsUtils(this).turnGPSOn(object : GpsUtils.OnGpsListener {
             override fun gpsStatus(isGPSEnable: Boolean) {
                 this@MainActivity.isGPSEnabled = isGPSEnable
             }
         })
         initAdapter()
         searchBtn.setOnClickListener {
-            if(isMinimum3Cities()){
-                weatherViewModel.fetchMultipleCitiesWeatherData(citiesNameList, API_KEY)
-                multipleCitiesObservableLiveData()
-            }else{
-                showErrorDialog(this, getString(R.string.multipleCityNamesHint))
-            }
+            performSearchCitiesWeather()
         }
 
         searchViewSetUp()
         citiesField.requestFocusFromTouch()
         callCurrentCityNameAPI()
+    }
+
+    private fun initAdapter() {
+        citiesWeatherList = ArrayList()
+        citiesAdapter = CitiesAdapter(citiesWeatherList!!)
+        foreCast5DaysDataList = ArrayList()
+        foreCast5DaysAdapter = Forecast5Days3HoursAdapter(foreCast5DaysDataList!!)
+
+        citiesRecyclerView.layoutManager = LinearLayoutManager(this)
+        citiesRecyclerView.adapter = citiesAdapter
+        fiveDaysDataRecyclerView.layoutManager = LinearLayoutManager(this)
+        fiveDaysDataRecyclerView.adapter = foreCast5DaysAdapter
+    }
+
+    private fun performSearchCitiesWeather() {
+        if (isMinimum3Cities()) {
+            weatherViewModel.fetchMultipleCitiesWeatherData(citiesNameList, API_KEY)
+            multipleCitiesObservableLiveData()
+        } else {
+            showErrorDialog(this, getString(R.string.multipleCityNamesHint))
+        }
     }
 
     private fun isMinimum3Cities(): Boolean {
@@ -74,18 +90,6 @@ class MainActivity : AppCompatActivity() {
         citiesField.isFocusable = true
         citiesField.isIconified = false
         citiesField.clearFocus()
-    }
-
-    private fun initAdapter() {
-        citiesWeatherList = ArrayList()
-        citiesAdapter = CitiesAdapter(citiesWeatherList!!)
-        foreCast5DaysDataList = ArrayList()
-        foreCast5DaysAdapter = Forecast5Days3HoursAdapter(foreCast5DaysDataList!!)
-
-        citiesRecyclerView.layoutManager = LinearLayoutManager(this)
-        citiesRecyclerView.adapter = citiesAdapter
-        fiveDaysDataRecyclerView.layoutManager = LinearLayoutManager(this)
-        fiveDaysDataRecyclerView.adapter = foreCast5DaysAdapter
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

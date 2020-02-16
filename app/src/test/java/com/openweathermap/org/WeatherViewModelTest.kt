@@ -25,8 +25,7 @@ class WeatherViewModelTest {
     lateinit var mockRepository: WeatherRepository
 
     @Mock
-    private lateinit var service: Service
-
+    private lateinit var mockService: Service
 
     @Before
     fun setUp() {
@@ -38,17 +37,17 @@ class WeatherViewModelTest {
         val turnsType1 = object : TypeToken<CurrentWeatherResponse>() {}.type
         this.weatherResponse =
             Gson().fromJson<CurrentWeatherResponse>(currentWeatherResponse, turnsType1)
-        Mockito.`when`(service.getCurrentWeatherDetailsService("3222.222", "223.2", "2332e23333"))
+        Mockito.`when`(mockService.getCurrentWeatherDetailsService("3222.222", "223.2", "2332e23333"))
             .thenReturn(Single.just(this.weatherResponse))
 
 
         val turnsType2 = object : TypeToken<Forecast5days3hoursResponse>() {}.type
         this.forecast5days3hoursResponse =
             Gson().fromJson<Forecast5days3hoursResponse>(forecast5days3hoursResponse, turnsType2)
-        Mockito.`when`(service.getForecast5Days3HoursService("Bengaluru", "2332e23333"))
+        Mockito.`when`(mockService.getForecast5Days3HoursService("Bengaluru", "2332e23333"))
             .thenReturn(Single.just(this.forecast5days3hoursResponse))
 
-        Mockito.`when`(service.getCityWeatherDataService("Bengaluru", "2332e23333"))
+        Mockito.`when`(mockService.getCityWeatherDataService("Bengaluru", "2332e23333"))
             .thenReturn(Observable.just(this.weatherResponse))
     }
 

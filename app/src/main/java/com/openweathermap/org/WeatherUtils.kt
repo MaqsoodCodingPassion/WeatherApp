@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Handler
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
@@ -17,6 +18,9 @@ fun showErrorDialog(activity: Activity, msg: String) {
     builder.setMessage(msg)
     val alertDialog = builder.create()
     alertDialog.show()
+    Handler().postDelayed({
+        if(alertDialog.isShowing) alertDialog.dismiss()
+    },2000)
 }
 
 //Hide keyboard

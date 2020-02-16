@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         })
         initAdapter()
         searchBtn.setOnClickListener {
-
             callMultipleCitiesWeather()
             multipleCitiesObservableLiveData()
         }
@@ -97,22 +96,22 @@ class MainActivity : AppCompatActivity() {
             getCitiesList().size in 3..7 -> {
                 searchBtn.isEnabled = false
                 citiesWeatherList?.clear()
-                weatherViewModel.multipleCitiesWeatherResponse.observe(this, Observer {
+                weatherViewModel.multipleCitiesWeatherResponse.observe(this, Observer { response ->
                     searchBtn.isEnabled = true
                     hideKeyboard(this)
-                    if (it != null) {
-                        this.citiesAdapter!!.setDataList(it)
+                    if (response.isNotEmpty()) {
+                        this.citiesAdapter!!.setDataList(response)
                         this.citiesAdapter!!.notifyDataSetChanged()
-                    } else {
-                        showErrorDialog(this, "Please enter the proper city name with separated comma")
+                    } else if(response.isEmpty()){
+                        showErrorDialog(this, getString(R.string.multipleCityNamesHint))
                     }
                 })
             }
             getCitiesList().size < 3 -> {
-                showErrorDialog(this, "Please enter the minimum 3 cities separated with comma")
+                showErrorDialog(this, getString(R.string.minimum3CityNamesHint))
             }
             else -> {
-                showErrorDialog(this, "Please do not enter more than 7 cities")
+                showErrorDialog(this, getString(R.string.cityNamesExceedHint))
             }
         }
     }

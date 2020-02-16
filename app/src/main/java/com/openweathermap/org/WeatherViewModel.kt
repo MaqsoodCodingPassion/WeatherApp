@@ -31,10 +31,9 @@ class WeatherViewModel(val repository: WeatherRepository) : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
         }.toList()
             .subscribe(
-                { multipleCitiesWeatherResponse.value = it },
-                {
+                { multipleCitiesWeatherResponse.value = it }, {
                     it.printStackTrace()
-                    multipleCitiesWeatherResponse.value = null
+                    multipleCitiesWeatherResponse.value = emptyList()
                 }
             )
     }
